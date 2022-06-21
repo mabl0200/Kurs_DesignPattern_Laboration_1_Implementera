@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Singleton;
+using System;
 
 namespace Kurs_DesignPattern_Laboration_1_Implementera
 {
@@ -6,7 +7,9 @@ namespace Kurs_DesignPattern_Laboration_1_Implementera
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            CurrencyExchange exchange = CurrencyExchange.GetInstance;
+            exchange.PrintDetails();
+            
         }
     }
 }
