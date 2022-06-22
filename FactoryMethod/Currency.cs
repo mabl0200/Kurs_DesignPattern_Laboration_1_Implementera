@@ -10,7 +10,7 @@ namespace FactoryMethod
         string Symbol { get; }
     }
 
-    //Product class
+    //Product class med olika valutor
     public class Euro : ICurrency
     {
         public string Currency => "EURO";

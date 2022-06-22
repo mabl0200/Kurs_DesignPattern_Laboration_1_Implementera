@@ -9,22 +9,24 @@ namespace Kurs_DesignPattern_Laboration_1_Implementera
     {
         static void Main(string[] args)
         {
+            //Jag har valt att använda Singleton, Factory Method och Strategy
+
             //Anropar Singleton-klassen för att skapa en ny instans av en Valutaväxling
             CurrencyExchange exchange = CurrencyExchange.GetInstance;
             exchange.PrintDetails();
-
-            //Anropar FactoryMethod för att hämta information om vald valuta att växla till
-            //Kollar vilken factory som ska användas med hjälp av Singleton objektet.
+            
+            //Använder metoden GetFactory med Singleton objektet som parameter för att ta reda på vilken Factory class som ska instansieras.
             ICurrencyFactory toFactory = GetFactory(exchange.CurrencyToExchangeTo);
-
-
-            //Anropar Strategy-klassen för att göra beräkningarna för att se vilka sedlar som klienten får vid växling.
+            
+            //Använder metoden GetNoteContext med Singleton objektet som parameter för att ta reda på vilken kontext class som ska instansieras.
             NoteContext noteContext = (NoteContext)GetNoteContext(exchange.CurrencyToExchangeTo);
+            //Anropar Strategy-klassen för att göra beräkningarna för att se vilka sedlar som klienten får vid växling.
             noteContext.DoCalulations(exchange, toFactory.GetCurrency());
             
         }
         public static ICurrencyFactory GetFactory(string currency)
         {
+            //Instansierar ett nytt objekt från en fabrik
             return currency switch
             {
                 "SEK" => new SekFactory(),
@@ -37,9 +39,9 @@ namespace Kurs_DesignPattern_Laboration_1_Implementera
         {
             return context switch
             {
-                "SEK" => new NoteContext(new GetSekNotes()),
-                "EURO" => new NoteContext(new GetEuroNotes()),
-                "USD" => new NoteContext(new GetUsdNotes()),
+                "SEK" => new NoteContext(new SekNotes()),
+                "EURO" => new NoteContext(new EuroNotes()),
+                "USD" => new NoteContext(new UsdNotes()),
                 _ => null,
             };
         }

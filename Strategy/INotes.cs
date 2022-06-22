@@ -6,13 +6,15 @@ using System.Text;
 
 namespace Strategy
 {
-    public interface INotesCalculations
+    //The Strategy
+    public interface INotes
     {
         List<decimal> Notes { get; }
         void CalculateAmountOfNotes(CurrencyExchange exchange, ICurrency currency);
     }
     
-    public class GetUsdNotes : INotesCalculations
+    //Konkreta strategiklasser som implementerar interfacet. 
+    public class UsdNotes : INotes
     {
         public List<decimal> Notes
         {
@@ -25,7 +27,7 @@ namespace Strategy
         public void CalculateAmountOfNotes(CurrencyExchange exchange, ICurrency currency)
         {
             decimal sum = (exchange.CurrencyAmount * exchange.CurrencyExchangeRate);
-
+            Console.WriteLine($"Du får {Math.Round(sum, 2)} {currency.Symbol} i dessa valörer:");
             foreach (var value in Notes)
             {
                 int counter = 0;
@@ -42,14 +44,14 @@ namespace Strategy
                     }
                     else
                     {
-                        Console.WriteLine($"{counter} st {value * 100} cent");
+                        Console.WriteLine($"{counter} st {Math.Round(value * 100)} cent");
                     }
                 }
             }
         }
     }
 
-    public class GetSekNotes : INotesCalculations
+    public class SekNotes : INotes
     {
         public List<decimal> Notes
         {
@@ -62,7 +64,7 @@ namespace Strategy
         public void CalculateAmountOfNotes(CurrencyExchange exchange, ICurrency currency)
         {
             decimal sum = (exchange.CurrencyAmount * exchange.CurrencyExchangeRate);
-
+            Console.WriteLine($"Du får {Math.Round(sum, 2)} {currency.Symbol} i dessa valörer:");
             foreach (var value in Notes)
             {
                 int counter = 0;
@@ -79,7 +81,7 @@ namespace Strategy
         }
     }
 
-    public class GetEuroNotes : INotesCalculations
+    public class EuroNotes : INotes
     {
         public List<decimal> Notes
         {
@@ -92,7 +94,8 @@ namespace Strategy
         public void CalculateAmountOfNotes(CurrencyExchange exchange, ICurrency currency)
         {
             decimal sum = (exchange.CurrencyAmount * exchange.CurrencyExchangeRate);
-
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
+            Console.WriteLine($"Du får {Math.Round(sum, 2)} {currency.Symbol} i dessa valörer:");
             foreach (var value in Notes)
             {
                 int counter = 0;
@@ -105,27 +108,30 @@ namespace Strategy
                 {
                     if (value >= 1)
                     {
+                        Console.OutputEncoding = System.Text.Encoding.Unicode;
                         Console.WriteLine($"{counter} st {value} {currency.Symbol}");
                     }
                     else
                     {
-                        Console.WriteLine($"{counter} st {value * 100} cent");
+                        Console.WriteLine($"{counter} st {Math.Round(value * 100)} cent");
                     }
                 }
             }
         }
     }
+
+    //Kontextklassen som håller en referens till Strategi objektet och använder det för att anropa rätt Strategiklass för att göra rätt uträkning.
     public class NoteContext
     {
-        private INotesCalculations _notesCalculations;
+        private INotes _notes;
 
-        public NoteContext(INotesCalculations notesCalculations)
+        public NoteContext(INotes notes)
         {
-            this._notesCalculations = notesCalculations;
+            this._notes = notes;
         }
         public void DoCalulations(CurrencyExchange exchange, ICurrency currency)
         {
-            _notesCalculations.CalculateAmountOfNotes(exchange, currency);
+            _notes.CalculateAmountOfNotes(exchange, currency);
         }
     }
 }

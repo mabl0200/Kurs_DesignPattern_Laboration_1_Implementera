@@ -11,7 +11,7 @@ namespace FactoryMethod
         ICurrency GetCurrency();
     }
 
-    //Factory klasser 
+    //Factory klasser som retunerar olika valutor
     public class EuroFactory : ICurrencyFactory
     {
         public ICurrency GetCurrency()
